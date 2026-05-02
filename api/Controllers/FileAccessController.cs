@@ -35,13 +35,7 @@ namespace FileAccessSystem.Controllers
             int riskScore = service.CalculateRisk(userId, fileId, _context);
 
             // 🔹 Step 3: Risk level (still here for now)
-            string riskLevel = "Low";
-
-            if (riskScore >= 70)
-                riskLevel = "High";
-            else if (riskScore >= 40)
-                riskLevel = "Medium";
-
+            string riskLevel = service.GetRiskLevel(riskScore);
             // 🔹 Step 4: Save risk log
             var riskLog = new RiskLog
             {

@@ -37,5 +37,14 @@ namespace FileAccessSystem.Services
 
             return riskScore;
         }
+        public string GetRiskLevel(int riskScore)
+        {
+            if (riskScore >= 70)
+                return "High";
+            else if (riskScore >= 40)
+                return "Medium";
+            else
+                return "Low";
+        }
     }
 }
