@@ -15,12 +15,27 @@ export class DashboardComponent implements OnInit {
   constructor(private api: ApiService, private cdr: ChangeDetectorRef) {}
   
   ngOnInit() {
-  this.api.getAlerts().subscribe((data: any) => {
-    console.log("API DATA:", data);
+    this.loadAlerts();
+  }
 
-    this.alerts = data;
-    this.loading = false;   
-    this.cdr.detectChanges(); 
+  loadAlerts() {
+    this.api.getAlerts().subscribe((data: any) => {
+      console.log("API DATA:", data);
+
+      this.alerts = data;
+      this.loading = false;   
+      this.cdr.detectChanges(); 
+    });
+  }
+simulateAccess() {
+  this.api.logAccess(1, 1).subscribe({
+    next: (res) => {
+      console.log("Access simulated", res);
+      this.loadAlerts();
+    },
+    error: (err) => {
+      console.error(err);
+    }
   });
 }
 }

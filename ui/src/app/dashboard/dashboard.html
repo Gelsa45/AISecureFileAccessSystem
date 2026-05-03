@@ -1,12 +1,15 @@
 <h2> Admin Dashboard</h2>
 
 <p *ngIf="loading">Loading...</p>
-
+<button (click)="simulateAccess()">
+  Simulate File Access
+</button>
 <table *ngIf="!loading && alerts.length > 0" border="1" cellpadding="8">
   <tr style="background-color: #f2f2f2;">
     <th>User ID</th>
     <th>Risk Score</th>
     <th>Risk Level</th>
+    <th>AI Reason</th>
     <th>Time</th>
   </tr>
 
@@ -17,7 +20,7 @@
     <td [style.color]="alert.riskLevel === 'High' ? 'red' : 'black'">
       {{alert.riskLevel}}
     </td>
-
+    <td>{{ alert.aiReason }}</td> 
     <td>{{alert.createdAt}}</td>
   </tr>
 </table>

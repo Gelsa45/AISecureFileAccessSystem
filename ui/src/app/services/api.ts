@@ -13,4 +13,10 @@ export class ApiService {
   getAlerts() {
     return this.http.get(`${this.baseUrl}/alerts`);
   }
+  logAccess(userId: number, fileId: number) {
+  return this.http.post(
+    `http://localhost:5088/api/fileaccess/log?userId=${userId}&fileId=${fileId}`,
+    {}
+  );
+}
 }
