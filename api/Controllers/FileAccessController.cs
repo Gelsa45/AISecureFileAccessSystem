@@ -85,5 +85,14 @@ namespace FileAccessSystem.Controllers
 
             return Ok(result);
         }
+        [HttpDelete("clear")]
+        public IActionResult ClearLogs()
+        {
+            _context.FileAccessLogs.RemoveRange(_context.FileAccessLogs);
+            _context.RiskLogs.RemoveRange(_context.RiskLogs);
+            _context.SaveChanges();
+
+            return Ok(new { message = "All logs cleared" });
+        }
     }
 }
