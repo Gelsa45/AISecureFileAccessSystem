@@ -19,4 +19,7 @@ export class ApiService {
     {}
   );
 }
+ clearLogs() {
+  return this.http.delete(`${this.baseUrl}/clear`);
+}
 }

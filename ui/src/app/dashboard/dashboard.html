@@ -1,28 +1,59 @@
-<h2> Admin Dashboard</h2>
+<div class="container">
 
-<p *ngIf="loading">Loading...</p>
-<button (click)="simulateAccess()">
-  Simulate File Access
-</button>
-<table *ngIf="!loading && alerts.length > 0" border="1" cellpadding="8">
-  <tr style="background-color: #f2f2f2;">
-    <th>User ID</th>
-    <th>Risk Score</th>
-    <th>Risk Level</th>
-    <th>AI Reason</th>
-    <th>Time</th>
-  </tr>
+  <h2>🚨 Admin Dashboard</h2>
 
-  <tr *ngFor="let alert of alerts">
-    <td>{{alert.userId}}</td>
-    <td>{{alert.riskScore}}</td>
+  <!-- Buttons -->
+  <div class="controls">
+    <button class="primary" (click)="simulateAccess()">Simulate Access</button>
+    <button class="danger" (click)="clearLogs()">Clear Logs</button>
+  </div>
 
-    <td [style.color]="alert.riskLevel === 'High' ? 'red' : 'black'">
-      {{alert.riskLevel}}
-    </td>
-    <td>{{ alert.aiReason }}</td> 
-    <td>{{alert.createdAt}}</td>
-  </tr>
-</table>
+  <!-- Cards -->
+  <div class="cards" *ngIf="!loading">
+    <div class="card">
+      <p>Total Alerts</p>
+      <h3>{{ alerts.length }}</h3>
+    </div>
 
-<p *ngIf="!loading && alerts.length === 0">No alerts found</p>
+    <div class="card high">
+      <p>High Risk</p>
+      <h3>{{ alerts.length }}</h3>
+    </div>
+  </div>
+
+  <p *ngIf="loading" class="loading">Loading...</p>
+
+  <!-- Table -->
+  <div class="table-container" *ngIf="!loading && alerts.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Score</th>
+          <th>Level</th>
+          <th>Reason</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let alert of alerts">
+          <td>{{ alert.userId }}</td>
+          <td>{{ alert.riskScore }}</td>
+
+          <td>
+            <span [ngClass]="alert.riskLevel.toLowerCase()">
+              {{ alert.riskLevel }}
+            </span>
+          </td>
+
+          <td class="reason">{{ alert.aiReason }}</td>
+          <td>{{ alert.createdAt | date:'short' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p *ngIf="!loading && alerts.length === 0">No alerts found</p>
+
+</div>

@@ -1,0 +1,126 @@
+/* 🔹 Page layout */
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* 🔹 Title */
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* 🔹 Buttons */
+.controls {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+button {
+  margin: 5px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.primary {
+  background: #007bff;
+  color: white;
+}
+
+.primary:hover {
+  background: #0056b3;
+}
+
+.danger {
+  background: #dc3545;
+  color: white;
+}
+
+.danger:hover {
+  background: #a71d2a;
+}
+
+/* 🔹 Cards */
+.cards {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.card {
+  flex: 1;
+  margin: 0 10px;
+  padding: 20px;
+  border-radius: 10px;
+  background: #f8f9fa;
+  text-align: center;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.card.high {
+  background: #ffe5e5;
+}
+
+.card h3 {
+  margin: 10px 0;
+  font-size: 24px;
+}
+
+/* 🔹 Table */
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+th {
+  background: #343a40;
+  color: white;
+}
+
+td, th {
+  padding: 12px;
+  text-align: center;
+}
+
+tr:nth-child(even) {
+  background: #f2f2f2;
+}
+
+/* 🔹 Risk colors */
+.low {
+  color: green;
+  font-weight: bold;
+}
+
+.medium {
+  color: orange;
+  font-weight: bold;
+}
+
+.high {
+  color: red;
+  font-weight: bold;
+}
+
+/* 🔹 Reason column */
+.reason {
+  text-align: left;
+  max-width: 300px;
+}
+
+/* 🔹 Loading */
+.loading {
+  text-align: center;
+  font-weight: bold;
+}
