@@ -67,12 +67,23 @@ namespace FileAccessSystem.Controllers
         [HttpGet("alerts")]
         public IActionResult GetAlerts()
         {
+            var service = new FileAccessService();
+
             var alerts = _context.RiskLogs
                 .Where(r => r.RiskLevel == "High")
                 .OrderByDescending(r => r.CreatedAt)
                 .ToList();
 
-            return Ok(alerts);
+            var result = alerts.Select(r => new
+            {
+                userId = r.UserId,
+                riskScore = r.RiskScore,
+                riskLevel = r.RiskLevel,
+                createdAt = r.CreatedAt,
+                aiReason = service.GetAIReason(r.RiskScore, 0, "High") // simple for now
+            });
+
+            return Ok(result);
         }
     }
 }
