@@ -46,5 +46,25 @@ namespace FileAccessSystem.Services
             else
                 return "Low";
         }
+                public string GetAIReason(int riskScore, int accessCount, string sensitivity)
+        {
+            // Simple rule-based reasoning (can replace with AI API later)
+
+            if (riskScore >= 70)
+            {
+                if (sensitivity == "High")
+                    return "High risk: User frequently accessed sensitive files with unusual behavior";
+                
+                return "High risk: Abnormal access pattern detected with high frequency";
+            }
+            else if (riskScore >= 40)
+            {
+                return "Medium risk: Repeated access behavior observed";
+            }
+            else
+            {
+                return "Low risk: Normal user activity";
+            }
+        }
     }
 }

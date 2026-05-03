@@ -47,13 +47,20 @@ namespace FileAccessSystem.Controllers
 
             _context.RiskLogs.Add(riskLog);
             _context.SaveChanges();
+            var count = _context.FileAccessLogs.Count(x => x.UserId == userId);
+            var file = _context.Files.FirstOrDefault(f => f.Id == fileId);
+
+            string sensitivity = file?.Sensitivity ?? "Low";
+
+            string aiReason = service.GetAIReason(riskScore, count, sensitivity);
 
             // 🔹 Step 5: Return response
             return Ok(new
             {
                 message = "Access logged",
                 riskScore = riskScore,
-                riskLevel = riskLevel
+                riskLevel = riskLevel,
+                aireason = aiReason
             });
         }
 
