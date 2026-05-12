@@ -74,15 +74,19 @@ namespace FileAccessSystem.Controllers
                 .OrderByDescending(r => r.CreatedAt)
                 .ToList();
 
-            var result = alerts.Select(r => new
+            var result = alerts.Select(r =>
             {
-                userId = r.UserId,
-                riskScore = r.RiskScore,
-                riskLevel = r.RiskLevel,
-                createdAt = r.CreatedAt,
-                aiReason = service.GetAIReason(r.RiskScore, 0, "High") // simple for now
-            });
+                var user = _context.Users.FirstOrDefault(u => u.Id == r.UserId);
 
+                return new
+                {
+                    userName = user?.Name ?? "Unknown",
+                    riskScore = r.RiskScore,
+                    riskLevel = r.RiskLevel,
+                    createdAt = r.CreatedAt,
+                    aiReason = service.GetAIReason(r.RiskScore, 0, "High")
+                };
+            }).ToList();
             return Ok(result);
         }
         [HttpDelete("clear")]
@@ -93,6 +97,31 @@ namespace FileAccessSystem.Controllers
             _context.SaveChanges();
 
             return Ok(new { message = "All logs cleared" });
+        }
+        [HttpGet("seed")]
+        public IActionResult SeedData()
+        {
+            if (!_context.Users.Any())
+            {
+                _context.Users.AddRange(
+                    new User { Name = "Alice", Role = "Admin" },
+                    new User { Name = "Bob", Role = "Employee" },
+                    new User { Name = "John", Role = "Manager" }
+                );
+            }
+
+            if (!_context.Files.Any())
+            {
+                _context.Files.AddRange(
+                    new FileItem { Name = "Financial_Report.pdf", Sensitivity = "High" },
+                    new FileItem { Name = "HR_Policy.docx", Sensitivity = "Medium" },
+                    new FileItem { Name = "Public_Notice.txt", Sensitivity = "Low" }
+                );
+            }
+
+            _context.SaveChanges();
+
+            return Ok("Sample data inserted");
         }
     }
 }
