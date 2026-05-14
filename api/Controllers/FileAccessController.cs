@@ -146,5 +146,17 @@ namespace FileAccessSystem.Controllers
 
             return Ok(files);
         }
+        [HttpGet("reset")]
+        public IActionResult ResetData()
+        {
+            _context.FileAccessLogs.RemoveRange(_context.FileAccessLogs);
+            _context.RiskLogs.RemoveRange(_context.RiskLogs);
+            _context.Users.RemoveRange(_context.Users);
+            _context.Files.RemoveRange(_context.Files);
+
+            _context.SaveChanges();
+
+            return Ok("All data reset");
+        }
     }
 }
