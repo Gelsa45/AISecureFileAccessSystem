@@ -1,7 +1,21 @@
 <div class="container">
 
   <h2>🚨 Admin Dashboard</h2>
+  <div class="controls">
 
+  <select [(ngModel)]="selectedUserId">
+    <option *ngFor="let user of users" [value]="user.id">
+      {{ user.name }}
+    </option>
+  </select>
+
+  <select [(ngModel)]="selectedFileId">
+    <option *ngFor="let file of files" [value]="file.id">
+      {{ file.name }}
+    </option>
+  </select>
+
+</div>
   <!-- Buttons -->
   <div class="controls">
     <button class="primary" (click)="simulateAccess()">Simulate Access</button>

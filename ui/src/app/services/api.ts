@@ -22,4 +22,11 @@ export class ApiService {
  clearLogs() {
   return this.http.delete(`${this.baseUrl}/clear`);
 }
+getUsers() {
+  return this.http.get(`${this.baseUrl}/users`);
+}
+
+getFiles() {
+  return this.http.get(`${this.baseUrl}/files`);
+}
 }

@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/api';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css'] 
   
@@ -15,11 +16,18 @@ export class DashboardComponent implements OnInit {
 
   loading = true;
   alerts: any[] = [];
+  users: any[] = [];
+  files: any[] = [];
+
+  selectedUserId = 1;
+  selectedFileId = 1;
 
   constructor(private api: ApiService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.loadAlerts();
+    this.loadUsers();
+    this.loadFiles();
   }
 
   // 🔹 Load alerts from backend
@@ -39,12 +47,23 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+  loadUsers() {
+  this.api.getUsers().subscribe((data: any) => {
+    this.users = data;
+  });
+}
+
+loadFiles() {
+  this.api.getFiles().subscribe((data: any) => {
+    this.files = data;
+  });
+}
 
   // 🔹 Simulate file access
   simulateAccess() {
     console.log("Simulate clicked");
 
-    this.api.logAccess(1, 1).subscribe({
+    this.api.logAccess(this.selectedUserId, this.selectedFileId).subscribe({
       next: (res) => {
         console.log("Access simulated:", res);
         this.loadAlerts();

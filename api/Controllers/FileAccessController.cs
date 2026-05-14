@@ -123,5 +123,28 @@ namespace FileAccessSystem.Controllers
 
             return Ok("Sample data inserted");
         }
+        [HttpGet("users")]
+        public IActionResult GetUsers()
+        {
+            var users = _context.Users.Select(u => new
+            {
+                u.Id,
+                u.Name
+            }).ToList();
+
+            return Ok(users);
+        }
+        [HttpGet("files")]
+        public IActionResult GetFiles()
+        {
+            var files = _context.Files.Select(f => new
+            {
+                f.Id,
+                f.Name,
+                f.Sensitivity
+            }).ToList();
+
+            return Ok(files);
+        }
     }
 }
