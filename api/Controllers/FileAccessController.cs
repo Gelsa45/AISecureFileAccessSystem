@@ -146,6 +146,29 @@ namespace FileAccessSystem.Controllers
 
             return Ok(files);
         }
+        [HttpGet("activity")]
+        public IActionResult GetActivityLogs()
+        {
+            var logs = _context.FileAccessLogs
+                .OrderByDescending(l => l.AccessTime)
+                .ToList();
+
+            var result = logs.Select(log =>
+            {
+                var user = _context.Users.FirstOrDefault(u => u.Id == log.UserId);
+
+                var file = _context.Files.FirstOrDefault(f => f.Id == log.FileItemId);
+
+                return new
+                {
+                    userName = user?.Name ?? "Unknown",
+                    fileName = file?.Name ?? "Unknown",
+                    accessTime = log.AccessTime
+                };
+            });
+
+            return Ok(result);
+        }
         [HttpGet("reset")]
         public IActionResult ResetData()
         {

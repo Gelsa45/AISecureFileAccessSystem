@@ -18,9 +18,10 @@ export class DashboardComponent implements OnInit {
   alerts: any[] = [];
   users: any[] = [];
   files: any[] = [];
-
+  activityLogs: any[] = [];
   selectedUserId = 1;
   selectedFileId = 1;
+
 
   constructor(private api: ApiService, private cdr: ChangeDetectorRef) {}
 
@@ -28,6 +29,7 @@ export class DashboardComponent implements OnInit {
     this.loadAlerts();
     this.loadUsers();
     this.loadFiles();
+    this.loadActivityLogs();
   }
 
   // 🔹 Load alerts from backend
@@ -45,6 +47,11 @@ export class DashboardComponent implements OnInit {
         console.error("Error loading alerts:", err);
         this.loading = false;
       }
+    });
+  }
+  loadActivityLogs() {
+    this.api.getActivityLogs().subscribe((data: any) => {
+      this.activityLogs = data;
     });
   }
   loadUsers() {
@@ -67,6 +74,7 @@ loadFiles() {
       next: (res) => {
         console.log("Access simulated:", res);
         this.loadAlerts();
+        this.loadActivityLogs();
       },
       error: (err) => {
         console.error("Simulate error:", err);

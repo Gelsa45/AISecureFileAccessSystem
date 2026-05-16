@@ -29,4 +29,7 @@ getUsers() {
 getFiles() {
   return this.http.get(`${this.baseUrl}/files`);
 }
+getActivityLogs() {
+  return this.http.get(`${this.baseUrl}/activity`);
+}
 }
