@@ -10,14 +10,16 @@ namespace FileAccessSystem.Controllers
     public class FileAccessController : ControllerBase
     {
         private readonly AppDbContext _context;
-
-        public FileAccessController(AppDbContext context)
+        private readonly AIExplanationService _aiService;
+        public FileAccessController(AppDbContext context, AIExplanationService aiService)
         {
-            _context = context;
+    _context = context;
+    _aiService = aiService;
+        
         }
 
         [HttpPost("log")]
-        public IActionResult LogAccess(int userId, int fileId)
+        public async Task<IActionResult> LogAccess(int userId, int fileId)
         {
             // 🔹 Step 1: Save access log
             var log = new FileAccessLog
@@ -36,33 +38,48 @@ namespace FileAccessSystem.Controllers
 
             // 🔹 Step 3: Risk level (still here for now)
             string riskLevel = service.GetRiskLevel(riskScore);
+            
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            var file = _context.Files.FirstOrDefault(f => f.Id == fileId);
+
+            string aiReason;
+
+            if (riskLevel == "High")
+            {
+                aiReason = await _aiService.GetAIExplanation(
+                    user?.Name ?? "Unknown User",
+                    file?.Name ?? "Unknown File",
+                    file?.Sensitivity ?? "Low",
+                    riskScore);
+            }
+            else
+            {
+                aiReason = service.GetAIReason(
+                    riskScore,
+                    _context.FileAccessLogs.Count(x => x.UserId == userId),
+                    file?.Sensitivity ?? "Low");
+            }
             // 🔹 Step 4: Save risk log
             var riskLog = new RiskLog
             {
                 UserId = userId,
                 RiskScore = riskScore,
                 RiskLevel = riskLevel,
+                AIReason = aiReason,
                 CreatedAt = DateTime.Now
             };
 
             _context.RiskLogs.Add(riskLog);
             _context.SaveChanges();
-            var count = _context.FileAccessLogs.Count(x => x.UserId == userId);
-            var file = _context.Files.FirstOrDefault(f => f.Id == fileId);
-
-            string sensitivity = file?.Sensitivity ?? "Low";
-
-            string aiReason = service.GetAIReason(riskScore, count, sensitivity);
-
-            // 🔹 Step 5: Return response
-            return Ok(new
-            {
-                message = "Access logged",
-                riskScore = riskScore,
-                riskLevel = riskLevel,
-                aireason = aiReason
-            });
-        }
+                        // 🔹 Step 5: Return response
+                        return Ok(new
+                        {
+                            message = "Access logged",
+                            riskScore = riskScore,
+                            riskLevel = riskLevel,
+                            aireason = aiReason
+                        });
+                    }
 
         [HttpGet("alerts")]
         public IActionResult GetAlerts()
@@ -84,7 +101,7 @@ namespace FileAccessSystem.Controllers
                     riskScore = r.RiskScore,
                     riskLevel = r.RiskLevel,
                     createdAt = r.CreatedAt,
-                    aiReason = service.GetAIReason(r.RiskScore, 0, "High")
+                    aiReason = r.AIReason
                 };
             }).ToList();
             return Ok(result);

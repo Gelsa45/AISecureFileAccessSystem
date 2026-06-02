@@ -7,7 +7,7 @@ namespace FileAccessSystem.Models
         public int UserId { get; set; }
         public int RiskScore { get; set; }
         public string RiskLevel { get; set; }
-
+         public string? AIReason { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }
