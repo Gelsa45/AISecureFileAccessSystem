@@ -22,4 +22,22 @@ public class FileAccessServiceTests
 
         Assert.Equal("Low", result);
     }
+    [Fact]
+    public void GetRiskLevel_ReturnsMedium_WhenScoreBetween40And69()
+    {
+        var service = new FileAccessService();
+
+        var result = service.GetRiskLevel(50);
+
+        Assert.Equal("Medium", result);
+    }
+    [Fact]
+    public void GetAIReason_ReturnsHighRiskMessage_WhenRiskIsHigh()
+    {
+        var service = new FileAccessService();
+
+        var result = service.GetAIReason(70, 25, "High");
+
+        Assert.Contains("High risk", result);
+    }
 }
