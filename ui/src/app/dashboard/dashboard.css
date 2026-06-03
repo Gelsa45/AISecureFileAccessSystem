@@ -98,29 +98,52 @@ tr:nth-child(even) {
 }
 
 /* 🔹 Risk colors */
-.low {
-  color: green;
+.low,
+.medium,
+.high {
+  padding: 6px 12px;
+  border-radius: 20px;
   font-weight: bold;
+  display: inline-block;
+}
+
+.low {
+  background: #d4edda;
+  color: #155724;
 }
 
 .medium {
-  color: orange;
-  font-weight: bold;
+  background: #fff3cd;
+  color: #856404;
 }
 
 .high {
-  color: red;
-  font-weight: bold;
+  background: #f8d7da;
+  color: #721c24;
 }
 
 /* 🔹 Reason column */
 .reason {
   text-align: left;
-  max-width: 300px;
+  max-width: 350px;
+  background: #f8f9fa;
+  border-left: 4px solid #007bff;
+  padding: 10px;
+  border-radius: 6px;
 }
 
 /* 🔹 Loading */
 .loading {
   text-align: center;
   font-weight: bold;
+}
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+tbody tr:hover {
+  background-color: #e9ecef;
 }
