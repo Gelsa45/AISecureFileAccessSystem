@@ -1,19 +1,25 @@
 <div class="container">
 
-  <h2>🚨 Admin Dashboard</h2>
-  <div class="controls">
+<h2>AI Secure File Access Dashboard</h2>
+  <div class="controls selector-row">
 
-  <select [(ngModel)]="selectedUserId">
-    <option *ngFor="let user of users" [value]="user.id">
-      {{ user.name }}
-    </option>
-  </select>
+  <div class="selector-group">
+    <label>User</label>
+    <select [(ngModel)]="selectedUserId">
+      <option *ngFor="let user of users" [value]="user.id">
+        {{ user.name }}
+      </option>
+    </select>
+  </div>
 
-  <select [(ngModel)]="selectedFileId">
-    <option *ngFor="let file of files" [value]="file.id">
-      {{ file.name }}
-    </option>
-  </select>
+  <div class="selector-group">
+    <label>File</label>
+    <select [(ngModel)]="selectedFileId">
+      <option *ngFor="let file of files" [value]="file.id">
+        {{ file.name }}
+      </option>
+    </select>
+  </div>
 
 </div>
   <!-- Buttons -->
@@ -24,15 +30,15 @@
 
   <!-- Cards -->
   <div class="cards" *ngIf="!loading">
-    <div class="card">
-      <p>Total Alerts</p>
-      <h3>{{ alerts.length }}</h3>
-    </div>
+   <div class="card">
+  <p>Total Activities</p>
+  <h3>{{ totalActivities }}</h3>
+</div>
 
-    <div class="card high">
-      <p>High Risk</p>
-      <h3>{{ alerts.length }}</h3>
-    </div>
+<div class="card high">
+  <p>High Risk Alerts</p>
+  <h3>{{ highRiskAlerts }}</h3>
+</div>
   </div>
 
   <p *ngIf="loading" class="loading">Loading...</p>
@@ -85,13 +91,14 @@
       <tr *ngFor="let log of activityLogs">
         <td>{{ log.userName }}</td>
         <td>{{ log.fileName }}</td>
-        <td>{{ log.accessTime }}</td>
+        <td>{{ log.accessTime | date:'short' }}</td>
       </tr>
     </tbody>
 
   </table>
 
 </div>
-  <p *ngIf="!loading && alerts.length === 0">No alerts found</p>
-
+  <p class="empty-state" *ngIf="!loading && alerts.length === 0">
+  No high-risk alerts detected.
+</p>
 </div>

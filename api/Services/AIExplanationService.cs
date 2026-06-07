@@ -25,12 +25,25 @@ namespace FileAccessSystem.Services
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", apiKey);
 
-            var prompt =
-                $"User {userName} accessed file {fileName}. " +
-                $"File sensitivity is {sensitivity}. " +
-                $"Calculated risk score is {riskScore}. " +
-                $"Explain in 1-2 sentences why this activity may be risky.";
+            var prompt = $@"
+You are a cybersecurity assistant.
 
+User: {userName}
+File: {fileName}
+Risk Score: {riskScore}
+
+Explain the risk in ONE SHORT SENTENCE.
+
+Rules:
+- Maximum 15 words.
+- No introductions.
+- No detailed explanations.
+- No legal, financial, or compliance discussions.
+- Return only the risk reason.
+
+Example:
+'Sensitive file accessed with elevated risk score. Review recommended.'
+";
             var requestBody = new
             {
                 model = "openai/gpt-4o-mini",
