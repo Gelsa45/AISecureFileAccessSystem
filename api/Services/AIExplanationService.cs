@@ -42,7 +42,7 @@ Rules:
 - Return only the risk reason.
 
 Example:
-'Sensitive file accessed with elevated risk score. Review recommended.'
+Sensitive file accessed with elevated risk score. Review recommended.
 ";
             var requestBody = new
             {
@@ -70,8 +70,10 @@ Example:
 
             var result = JObject.Parse(json);
 
-            return result["choices"]?[0]?["message"]?["content"]?.ToString()
-                   ?? "AI explanation unavailable.";
+            var aiResponse = result["choices"]?[0]?["message"]?["content"]?.ToString()
+                 ?? "AI explanation unavailable.";
+
+return aiResponse.Trim().Trim('"').Trim('\'');
         }
     }
 }
