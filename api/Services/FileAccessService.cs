@@ -31,9 +31,25 @@ namespace FileAccessSystem.Services
             {
                 if (file.Sensitivity == "High")
                     riskScore += 30;
+                else if (file.Sensitivity == "Medium")
+                    riskScore += 20;
                 else
                     riskScore += 10;
             }
+             var user = context.Users.FirstOrDefault(u => u.Id == userId);
+
+            if (user != null)
+            {
+                if (user.Role == "Admin")
+                    riskScore -= 20;
+                else if (user.Role == "Manager")
+                    riskScore -= 10;
+            }
+
+            // Keep score within range
+            riskScore = Math.Max(0, riskScore);
+
+            
 
             return riskScore;
         }
@@ -48,7 +64,7 @@ namespace FileAccessSystem.Services
         }
                 public string GetAIReason(int riskScore, int accessCount, string sensitivity)
         {
-            // Simple rule-based reasoning (can replace with AI API later)
+            // Simple rule-based reasoning 
 
             if (riskScore >= 70)
             {

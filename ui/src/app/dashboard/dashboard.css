@@ -55,11 +55,20 @@ button {
 .card {
   flex: 1;
   margin: 0 10px;
-  padding: 20px;
-  border-radius: 10px;
-  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+  background: white;
   text-align: center;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.card p {
+  font-size: 18px;
+}
+
+.card h3 {
+  font-size: 42px;
+  margin-top: 10px;
 }
 
 .card.high {
@@ -98,29 +107,78 @@ tr:nth-child(even) {
 }
 
 /* 🔹 Risk colors */
-.low {
-  color: green;
+.low,
+.medium,
+.high {
+  padding: 6px 12px;
+  border-radius: 20px;
   font-weight: bold;
+  display: inline-block;
+}
+
+.low {
+  background: #d4edda;
+  color: #155724;
 }
 
 .medium {
-  color: orange;
-  font-weight: bold;
+  background: #fff3cd;
+  color: #856404;
 }
 
 .high {
-  color: red;
-  font-weight: bold;
+  background: #f8d7da;
+  color: #721c24;
 }
 
 /* 🔹 Reason column */
 .reason {
   text-align: left;
-  max-width: 300px;
+  max-width: 350px;
+  background: #f8f9fa;
+  border-left: 4px solid #0d6efd;
+  padding: 12px;
+  border-radius: 8px;
+  line-height: 1.4;
+  font-size: 14px;
 }
 
 /* 🔹 Loading */
 .loading {
   text-align: center;
   font-weight: bold;
+}
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+tbody tr:hover {
+  background-color: #e9ecef;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+  font-style: italic;
+}
+.selector-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.selector-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.selector-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
 }

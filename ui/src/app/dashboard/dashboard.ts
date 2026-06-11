@@ -21,7 +21,13 @@ export class DashboardComponent implements OnInit {
   activityLogs: any[] = [];
   selectedUserId = 1;
   selectedFileId = 1;
+  get totalActivities(): number {
+  return this.activityLogs.length;
+   }
 
+  get highRiskAlerts(): number {
+    return this.alerts.length;
+  }
 
   constructor(private api: ApiService, private cdr: ChangeDetectorRef) {}
 
