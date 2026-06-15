@@ -1,15 +1,29 @@
-<h2>User Dashboard</h2>
+<div class="dashboard-container">
 
-<p>Welcome {{ userName }}</p>
+  <h1>Secure File Access</h1>
 
-<h3>Available Files</h3>
+  <p class="welcome">
+    Welcome, {{ userName }}
+  </p>
 
-<div *ngFor="let file of files">
+  <h2>Available Files</h2>
 
-  {{ file.name }}
+  <div class="files-grid">
 
-  <button (click)="accessFile(file.id)">
-    Open
-  </button>
+    <div class="file-card" *ngFor="let file of files">
+
+      <div class="file-name">
+        📄 {{ file.name }}
+      </div>
+
+      <button
+        class="open-btn"
+        (click)="accessFile(file.id)">
+        Open File
+      </button>
+
+    </div>
+
+  </div>
 
 </div>

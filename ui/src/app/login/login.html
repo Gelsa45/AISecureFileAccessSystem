@@ -1,18 +1,22 @@
-<h2>Login</h2>
+<div class="login-container">
 
-<input
-  [(ngModel)]="username"
-  placeholder="Username">
+  <div class="login-card">
 
-<br><br>
+    <h1>AI Secure File Access System</h1>
 
-<input
-  [(ngModel)]="password"
-  type="password"
-  placeholder="Password">
+    <input
+      [(ngModel)]="username"
+      placeholder="Username">
 
-<br><br>
+    <input
+      [(ngModel)]="password"
+      type="password"
+      placeholder="Password">
 
-<button (click)="login()">
-  Login
-</button>
+    <button (click)="login()">
+      Sign In
+    </button>
+
+  </div>
+
+</div>

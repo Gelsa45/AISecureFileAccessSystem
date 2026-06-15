@@ -1,32 +1,106 @@
-<div class="container">
+<div class="dashboard-container">
 
-  <h2>AI Secure File Access Dashboard</h2>
+  <h1>Admin Dashboard</h1>
 
-  <button (click)="clearLogs()">
+  <button class="reset-btn" (click)="clearLogs()">
     Reset Activity Logs
   </button>
 
-  <hr>
+  <div class="stats-grid">
 
-  <p>Total Activities: {{ totalActivities }}</p>
-  <p>High Risk Alerts: {{ highRiskAlerts }}</p>
+    <div class="stat-card">
+      <h3>Total Activities</h3>
+      <p>{{ totalActivities }}</p>
+    </div>
 
-  <h3>Recent Activity Logs</h3>
+    <div class="stat-card">
+      <h3>High Risk Alerts</h3>
+      <p class="alert-count">{{ highRiskAlerts }}</p>
+    </div>
 
-  <table border="1" *ngIf="activityLogs.length > 0">
+  </div>
 
-    <tr>
-      <th>User</th>
-      <th>File</th>
-      <th>Access Time</th>
-    </tr>
+  <!-- HIGH RISK ALERTS -->
 
-    <tr *ngFor="let log of activityLogs">
-      <td>{{ log.userName }}</td>
-      <td>{{ log.fileName }}</td>
-      <td>{{ log.accessTime }}</td>
-    </tr>
+  <div class="table-card" *ngIf="alerts.length > 0">
 
-  </table>
+    <h2>High Risk Alerts</h2>
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Risk Score</th>
+          <th>Risk Level</th>
+          <th>Reason</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let alert of alerts">
+
+          <td>{{ alert.userName }}</td>
+
+          <td>{{ alert.riskScore }}</td>
+
+          <td>
+            <span [ngClass]="alert.riskLevel.toLowerCase()">
+              {{ alert.riskLevel }}
+            </span>
+          </td>
+
+          <td>{{ alert.aiReason }}</td>
+
+          <td>{{ alert.createdAt | date:'short' }}</td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <!-- ACTIVITY LOGS -->
+
+  <div class="table-card">
+
+    <h2>Recent Activity Logs</h2>
+
+    <table *ngIf="activityLogs.length > 0">
+
+      <thead>
+
+        <tr>
+          <th>User</th>
+          <th>File</th>
+          <th>Access Time</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let log of activityLogs">
+
+          <td>{{ log.userName }}</td>
+
+          <td>{{ log.fileName }}</td>
+
+          <td>{{ log.accessTime | date:'short' }}</td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
 
 </div>
+<p *ngIf="activityLogs.length === 0">
+  No activity logs found.
+</p>
