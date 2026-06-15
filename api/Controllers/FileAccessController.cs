@@ -165,27 +165,39 @@ namespace FileAccessSystem.Controllers
             return Ok(files);
         }
         [HttpGet("open/{fileId}")]
-        public IActionResult OpenFile(int fileId)
-        {
-            var file = _context.Files.FirstOrDefault(f => f.Id == fileId);
+public IActionResult OpenFile(int fileId)
+{
+    var file = _context.Files.FirstOrDefault(f => f.Id == fileId);
 
-            if (file == null)
-                return NotFound("File not found");
+    if (file == null)
+        return NotFound("File not found");
 
-            var fullPath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                file.FilePath);
+    var fullPath = Path.Combine(
+        Directory.GetCurrentDirectory(),
+        file.FilePath);
 
-            if (!System.IO.File.Exists(fullPath))
-                return NotFound("Physical file not found");
+    if (!System.IO.File.Exists(fullPath))
+        return NotFound("Physical file not found");
 
-            var bytes = System.IO.File.ReadAllBytes(fullPath);
+    var extension =
+        Path.GetExtension(fullPath).ToLower();
 
-            return File(
-                bytes,
-                "application/octet-stream",
-                file.Name);
-        }
+    string contentType = extension switch
+    {
+        ".pdf" => "application/pdf",
+        ".txt" => "text/plain",
+        ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        _ => "application/octet-stream"
+    };
+
+    var bytes =
+        System.IO.File.ReadAllBytes(fullPath);
+
+    return File(
+        bytes,
+        contentType
+    );
+}
         [HttpGet("activity")]
         public IActionResult GetActivityLogs()
         {
