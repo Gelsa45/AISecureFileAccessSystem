@@ -1,104 +1,125 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef
+} from '@angular/core';
+
 import { ApiService } from '../services/api';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule],
   templateUrl: './dashboard.html',
-  styleUrls: ['./dashboard.css'] 
-  
+  styleUrls: ['./dashboard.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent
+  implements OnInit, OnDestroy {
 
   loading = true;
+
   alerts: any[] = [];
-  users: any[] = [];
-  files: any[] = [];
   activityLogs: any[] = [];
-  selectedUserId = 1;
-  selectedFileId = 1;
+
+  private refreshInterval: any;
+
+  constructor(
+    private api: ApiService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
   get totalActivities(): number {
-  return this.activityLogs.length;
-   }
+    return this.activityLogs.length;
+  }
 
   get highRiskAlerts(): number {
     return this.alerts.length;
   }
 
-  constructor(private api: ApiService, private cdr: ChangeDetectorRef) {}
+  ngOnInit(): void {
 
-  ngOnInit() {
     this.loadAlerts();
-    this.loadUsers();
-    this.loadFiles();
     this.loadActivityLogs();
+
+    this.refreshInterval = setInterval(() => {
+
+      this.loadAlerts();
+      this.loadActivityLogs();
+
+    }, 1000);
   }
 
-  // 🔹 Load alerts from backend
-  loadAlerts() {
-    this.loading = true;
+  ngOnDestroy(): void {
+
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
+    }
+  }
+
+  loadAlerts(): void {
 
     this.api.getAlerts().subscribe({
+
       next: (data: any) => {
-        console.log("API DATA:", data);
-        this.alerts = data;
+
+        this.alerts = [...data];
+
         this.loading = false;
+
         this.cdr.detectChanges();
       },
+
       error: (err) => {
-        console.error("Error loading alerts:", err);
+
+        console.error(err);
+
         this.loading = false;
       }
     });
   }
-  loadActivityLogs() {
-    this.api.getActivityLogs().subscribe((data: any) => {
-      this.activityLogs = data;
-    });
-  }
-  loadUsers() {
-  this.api.getUsers().subscribe((data: any) => {
-    this.users = data;
-  });
-}
 
-loadFiles() {
-  this.api.getFiles().subscribe((data: any) => {
-    this.files = data;
-  });
-}
+  loadActivityLogs(): void {
 
-  // 🔹 Simulate file access
-  simulateAccess() {
-    console.log("Simulate clicked");
+    this.api.getActivityLogs().subscribe({
 
-    this.api.logAccess(this.selectedUserId, this.selectedFileId).subscribe({
-      next: (res) => {
-        console.log("Access simulated:", res);
-        this.loadAlerts();
-        this.loadActivityLogs();
+      next: (data: any) => {
+
+        console.log('ACTIVITY RECEIVED:', data);
+
+        this.activityLogs = [...data];
+
+        this.loading = false;
+
+        this.cdr.detectChanges();
       },
+
       error: (err) => {
-        console.error("Simulate error:", err);
+
+        console.error(err);
       }
     });
   }
 
-  // 🔹 Clear logs
-  clearLogs() {
-    console.log("Clear button clicked");
+  clearLogs(): void {
 
     this.api.clearLogs().subscribe({
-      next: (res) => {
-        console.log("Logs cleared:", res);
+
+      next: () => {
+
+        this.alerts = [];
+        this.activityLogs = [];
+
         this.loadAlerts();
+        this.loadActivityLogs();
+
+        this.cdr.detectChanges();
       },
+
       error: (err) => {
-        console.error("Clear error:", err);
+
+        console.error(err);
       }
     });
   }

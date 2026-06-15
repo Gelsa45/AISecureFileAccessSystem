@@ -1,0 +1,15 @@
+<h2>User Dashboard</h2>
+
+<p>Welcome {{ userName }}</p>
+
+<h3>Available Files</h3>
+
+<div *ngFor="let file of files">
+
+  {{ file.name }}
+
+  <button (click)="accessFile(file.id)">
+    Open
+  </button>
+
+</div>

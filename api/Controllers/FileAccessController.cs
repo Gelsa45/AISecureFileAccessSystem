@@ -121,18 +121,19 @@ namespace FileAccessSystem.Controllers
             if (!_context.Users.Any())
             {
                 _context.Users.AddRange(
-                    new User { Name = "Alice", Role = "Admin" },
-                    new User { Name = "Bob", Role = "Employee" },
-                    new User { Name = "John", Role = "Manager" }
+                    new User { Name = "Alice", Role = "Admin", Password = "admin123" },
+                    new User { Name = "Bob", Role = "Employee", Password = "bob123" },
+                    new User { Name = "John", Role = "Manager", Password = "john123"     }
                 );
             }
 
             if (!_context.Files.Any())
             {
                 _context.Files.AddRange(
-                    new FileItem { Name = "Financial_Report.pdf", Sensitivity = "High" },
-                    new FileItem { Name = "HR_Policy.docx", Sensitivity = "Medium" },
-                    new FileItem { Name = "Public_Notice.txt", Sensitivity = "Low" }
+                    new FileItem { Name = "Financial_Report.pdf", Sensitivity = "High", FilePath = "Uploads/Financial_Report.pdf" },
+
+                    new FileItem { Name = "HR_Policy.docx", Sensitivity = "Medium", FilePath = "Uploads/HR_Policy.docx" },
+                    new FileItem { Name = "Public_Notice.txt", Sensitivity = "Low", FilePath = "Uploads/Public_Notice.txt" }
                 );
             }
 
@@ -162,6 +163,28 @@ namespace FileAccessSystem.Controllers
             }).ToList();
 
             return Ok(files);
+        }
+        [HttpGet("open/{fileId}")]
+        public IActionResult OpenFile(int fileId)
+        {
+            var file = _context.Files.FirstOrDefault(f => f.Id == fileId);
+
+            if (file == null)
+                return NotFound("File not found");
+
+            var fullPath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                file.FilePath);
+
+            if (!System.IO.File.Exists(fullPath))
+                return NotFound("Physical file not found");
+
+            var bytes = System.IO.File.ReadAllBytes(fullPath);
+
+            return File(
+                bytes,
+                "application/octet-stream",
+                file.Name);
         }
         [HttpGet("activity")]
         public IActionResult GetActivityLogs()

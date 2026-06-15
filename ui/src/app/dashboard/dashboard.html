@@ -1,104 +1,32 @@
 <div class="container">
 
-<h2>AI Secure File Access Dashboard</h2>
-  <div class="controls selector-row">
+  <h2>AI Secure File Access Dashboard</h2>
 
-  <div class="selector-group">
-    <label>User</label>
-    <select [(ngModel)]="selectedUserId">
-      <option *ngFor="let user of users" [value]="user.id">
-        {{ user.name }}
-      </option>
-    </select>
-  </div>
+  <button (click)="clearLogs()">
+    Reset Activity Logs
+  </button>
 
-  <div class="selector-group">
-    <label>File</label>
-    <select [(ngModel)]="selectedFileId">
-      <option *ngFor="let file of files" [value]="file.id">
-        {{ file.name }}
-      </option>
-    </select>
-  </div>
+  <hr>
 
-</div>
-  <!-- Buttons -->
-  <div class="controls">
-    <button class="primary" (click)="simulateAccess()">Simulate Access</button>
-    <button class="danger" (click)="clearLogs()">Clear Logs</button>
-  </div>
+  <p>Total Activities: {{ totalActivities }}</p>
+  <p>High Risk Alerts: {{ highRiskAlerts }}</p>
 
-  <!-- Cards -->
-  <div class="cards" *ngIf="!loading">
-   <div class="card">
-  <p>Total Activities</p>
-  <h3>{{ totalActivities }}</h3>
-</div>
+  <h3>Recent Activity Logs</h3>
 
-<div class="card high">
-  <p>High Risk Alerts</p>
-  <h3>{{ highRiskAlerts }}</h3>
-</div>
-  </div>
+  <table border="1" *ngIf="activityLogs.length > 0">
 
-  <p *ngIf="loading" class="loading">Loading...</p>
+    <tr>
+      <th>User</th>
+      <th>File</th>
+      <th>Access Time</th>
+    </tr>
 
-  <!-- Table -->
-  <div class="table-container" *ngIf="!loading && alerts.length > 0">
-    <table>
-      <thead>
-        <tr>
-          <th>User</th>
-          <th>Score</th>
-          <th>Level</th>
-          <th>Reason</th>
-          <th>Time</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let alert of alerts">
-          <td>{{ alert.userName }}</td>
-          <td>{{ alert.riskScore }}</td>
-
-          <td>
-            <span [ngClass]="alert.riskLevel.toLowerCase()">
-              {{ alert.riskLevel }}
-            </span>
-          </td>
-
-          <td class="reason">{{ alert.aiReason }}</td>
-          <td>{{ alert.createdAt | date:'short' }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
- <h2>Recent Activity Logs</h2>
-
-<div class="table-container">
-
-  <table *ngIf="activityLogs.length > 0">
-
-    <thead>
-      <tr>
-        <th>User</th>
-        <th>File</th>
-        <th>Access Time</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let log of activityLogs">
-        <td>{{ log.userName }}</td>
-        <td>{{ log.fileName }}</td>
-        <td>{{ log.accessTime | date:'short' }}</td>
-      </tr>
-    </tbody>
+    <tr *ngFor="let log of activityLogs">
+      <td>{{ log.userName }}</td>
+      <td>{{ log.fileName }}</td>
+      <td>{{ log.accessTime }}</td>
+    </tr>
 
   </table>
 
-</div>
-  <p class="empty-state" *ngIf="!loading && alerts.length === 0">
-  No high-risk alerts detected.
-</p>
 </div>

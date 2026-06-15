@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +32,11 @@ getFiles() {
 }
 getActivityLogs() {
   return this.http.get(`${this.baseUrl}/activity`);
+}
+openFile(fileId: number) {
+  window.open(
+    `${this.baseUrl}/open/${fileId}`,
+    '_blank'
+  );
 }
 }
